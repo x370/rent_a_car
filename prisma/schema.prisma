@@ -1,0 +1,185 @@
+// This is your Prisma schema file
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// --- Enums ---
+
+enum Role {
+  CUSTOMER
+  OWNER
+  ADMIN
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  ONGOING
+  COMPLETED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+enum PaymentMethod {
+  CARD
+  CASH
+  WALLET
+  BANK_TRANSFER
+}
+
+enum Transmission {
+  MANUAL
+  AUTO
+}
+
+// --- Models ---
+
+model User {
+  id          Int        @id @default(autoincrement())
+  name        String
+  email       String     @unique
+  phone       String     @unique
+  password    String
+  role        Role       @default(CUSTOMER)
+  is_verified Boolean    @default(false)
+  created_at  DateTime   @default(now())
+  updated_at  DateTime   @updatedAt
+
+  // Relationships
+  driver      Driver?    // One-to-One
+  cars        Car[]      // One-to-Many (Owner's cars)
+  bookings    Booking[]
+  reviews     Review[]
+  favorites   Favorite[]
+}
+
+model Driver {
+  id               Int      @id @default(autoincrement())
+  user_id          Int      @unique
+  license_number   String   @unique
+  experience_years Int
+  is_available     Boolean  @default(true)
+  created_at       DateTime @default(now())
+  updated_at       DateTime @updatedAt
+
+  // Relationships
+  user             User      @relation(fields: [user_id], references: [id])
+  bookings         Booking[]
+}
+
+model Car {
+  id                       Int          @id @default(autoincrement())
+  owner_id                 Int
+  name                     String
+  brand                    String
+  model                    String
+  year                     Int
+  license_plate            String       @unique
+  seating_capacity         Int
+  transmission             Transmission
+  fuel_type                String
+  price_per_day_without_driver Float
+  price_per_day_with_driver    Float
+  city                     String
+  image_url                String
+  is_available             Boolean      @default(true)
+  created_at               DateTime     @default(now())
+  updated_at               DateTime     @updatedAt
+
+  // Relationships
+  owner                    User         @relation(fields: [owner_id], references: [id])
+  images                   CarImage[]
+  reviews                  Review[]
+  bookings                 Booking[]
+  favorites                Favorite[]
+}
+
+model CarImage {
+  id         Int      @id @default(autoincrement())
+  car_id     Int
+  image_url  String
+  is_primary Boolean  @default(false)
+  created_at DateTime @default(now())
+
+  car        Car      @relation(fields: [car_id], references: [id])
+}
+
+model Booking {
+  id               Int           @id @default(autoincrement())
+  user_id          Int
+  car_id           Int
+  driver_id        Int?          // Nullable as driver is optional
+  start_date       DateTime
+  end_date         DateTime
+  with_driver      Boolean       @default(false)
+  pickup_location  String
+  dropoff_location String
+  total_price      Float
+  status           BookingStatus @default(PENDING)
+  created_at       DateTime      @default(now())
+  updated_at       DateTime      @updatedAt
+
+  // Relationships
+  user             User          @relation(fields: [user_id], references: [id])
+  car              Car           @relation(fields: [car_id], references: [id])
+  driver           Driver?       @relation(fields: [driver_id], references: [id])
+  payment          Payment?
+}
+
+model Payment {
+  id             Int           @id @default(autoincrement())
+  booking_id     Int           @unique
+  amount         Float
+  payment_method PaymentMethod
+  payment_status PaymentStatus @default(PENDING)
+  transaction_id String?       @unique
+  paid_at        DateTime?
+  created_at     DateTime      @default(now())
+
+  booking        Booking       @relation(fields: [booking_id], references: [id])
+}
+
+model Review {
+  id         Int      @id @default(autoincrement())
+  user_id    Int
+  car_id     Int
+  rating     Int      // 1-5
+  comment    String?
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  user       User     @relation(fields: [user_id], references: [id])
+  car        Car      @relation(fields: [car_id], references: [id])
+}
+
+model Favorite {
+  user_id    Int
+  car_id     Int
+  created_at DateTime @default(now())
+
+  user       User     @relation(fields: [user_id], references: [id])
+  car        Car      @relation(fields: [car_id], references: [id])
+
+  @@id([user_id, car_id]) // Composite primary key for favorites
+}
+
+model Admin {
+  id         Int      @id @default(autoincrement())
+  name       String
+  email      String   @unique
+  password   String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
