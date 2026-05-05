@@ -63,6 +63,7 @@ model User {
   bookings    Booking[]
   reviews     Review[]
   favorites   Favorite[]
+  audit_logs  AuditLog[]
 }
 
 model Driver {
@@ -182,4 +183,17 @@ model Admin {
   password   String
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+}
+
+model AuditLog {
+  id          Int      @id @default(autoincrement())
+  user_id     Int?
+  action      String
+  resource    String?
+  resource_id String?
+  details     Json?
+  ip_address  String?
+  created_at  DateTime @default(now())
+
+  user        User?    @relation(fields: [user_id], references: [id])
 }

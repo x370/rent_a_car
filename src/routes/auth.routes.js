@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const { register } = require('../controllers/auth.controllers');
+const { register, login } = require('../controllers/auth.controllers');
 const validate = require('../middlewares/validate.middleware');
-const { registerSchema } = require('../validations/auth.validation');
+const { registerSchema, loginSchema } = require('../validations/auth.validation');
 
 /**
  * @swagger
@@ -40,5 +40,33 @@ const { registerSchema } = require('../validations/auth.validation');
  *         description: User already exists
  */
 router.post('/register', validate(registerSchema), register);
+
+/**
+ * @swagger
+ * /api/auth/login:
+ *   post:
+ *     summary: Login a user
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Login successful
+ *       401:
+ *         description: Invalid email or password
+ */
+router.post('/login', validate(loginSchema), login);
 
 module.exports = router;

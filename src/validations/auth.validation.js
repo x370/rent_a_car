@@ -8,4 +8,9 @@ const registerSchema = Joi.object({
     role: Joi.string().valid('CUSTOMER', 'OWNER', 'ADMIN').optional()
 }).unknown(false);
 
-module.exports = { registerSchema };
+const loginSchema = Joi.object({
+    email: Joi.string().email().required(),
+    password: Joi.string().required()
+}).unknown(false);
+
+module.exports = { registerSchema, loginSchema };

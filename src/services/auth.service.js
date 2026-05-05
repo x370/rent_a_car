@@ -1,5 +1,6 @@
 const { prisma } = require('../config/db.config');
 const bcrypt = require('bcryptjs');
+const { generateToken } = require('../utils/jwt.utils');
 
 /**
  * Business logic to create a new user
@@ -29,4 +30,30 @@ const createUser = async (userData) => {
   return user;
 };
 
-module.exports = { createUser };
+/**
+ * Business logic to login a user
+ * @param {Object} loginData 
+ * @returns {Promise<Object>}
+ */
+const loginUser = async (loginData) => {
+  const { email, password } = loginData;
+
+  const user = await prisma.user.findUnique({
+    where: { email }
+  });
+
+  if (!user) {
+    throw new Error('Invalid email or password');
+  }
+
+  const isPasswordValid = await bcrypt.compare(password, user.password);
+  if (!isPasswordValid) {
+    throw new Error('Invalid email or password');
+  }
+
+  const token = generateToken({ id: user.id, role: user.role });
+
+  return { user, token };
+};
+
+module.exports = { createUser, loginUser };
