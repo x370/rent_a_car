@@ -1,0 +1,79 @@
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  height: 80px;
+  display: flex;
+  align-items: center;
+}
+
+.navContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: var(--text);
+}
+
+.logo span {
+  color: var(--primary);
+}
+
+.links {
+  display: flex;
+  gap: 2.5rem;
+}
+
+.link {
+  font-weight: 500;
+  color: var(--text-dim);
+  transition: var(--transition);
+}
+
+.link:hover {
+  color: var(--text);
+}
+
+.auth {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.loginBtn {
+  font-weight: 500;
+  color: var(--text);
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  transition: var(--transition);
+}
+
+.loginBtn:hover {
+  background: var(--glass);
+}
+
+.registerBtn {
+  font-weight: 600;
+  color: #000;
+  background: var(--text);
+  padding: 0.6rem 1.5rem;
+  border-radius: 8px;
+  transition: var(--transition);
+}
+
+.registerBtn:hover {
+  background: var(--primary);
+  color: #fff;
+  box-shadow: 0 0 20px var(--primary-glow);
+}
+
+@media (max-width: 768px) {
+  .links {
+    display: none;
+  }
+}

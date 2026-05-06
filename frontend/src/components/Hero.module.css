@@ -1,0 +1,152 @@
+.hero {
+  position: relative;
+  min-height: calc(100vh - 80px);
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  padding: 4rem 0;
+}
+
+.heroContent {
+  position: relative;
+  z-index: 10;
+  max-width: 650px;
+}
+
+.title {
+  font-size: 4.5rem;
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+  letter-spacing: -2px;
+}
+
+.title span {
+  color: var(--primary);
+  background: linear-gradient(to right, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+  font-size: 1.25rem;
+  color: var(--text-dim);
+  line-height: 1.6;
+  margin-bottom: 2.5rem;
+}
+
+.cta {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 4rem;
+}
+
+.primaryBtn {
+  background: var(--primary);
+  color: #fff;
+  padding: 1rem 2.5rem;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  transition: var(--transition);
+  box-shadow: 0 10px 30px var(--primary-glow);
+}
+
+.primaryBtn:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px var(--primary-glow);
+}
+
+.secondaryBtn {
+  border: 1px solid var(--glass-border);
+  color: var(--text);
+  padding: 1rem 2.5rem;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  transition: var(--transition);
+  background: var(--glass);
+}
+
+.secondaryBtn:hover {
+  background: var(--glass-border);
+}
+
+.stats {
+  display: flex;
+  gap: 3rem;
+}
+
+.statItem h3 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.2rem;
+}
+
+.statItem p {
+  color: var(--text-dim);
+  font-size: 0.9rem;
+}
+
+.heroImageWrapper {
+  position: absolute;
+  right: -10%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 55%;
+  z-index: 1;
+}
+
+.heroImage {
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 0 50px rgba(0, 0, 0, 0.5));
+}
+
+.glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120%;
+  height: 120%;
+  background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%);
+  z-index: -1;
+  opacity: 0.3;
+}
+
+@media (max-width: 1024px) {
+  .hero {
+    flex-direction: column;
+    text-align: center;
+    padding-top: 2rem;
+  }
+  
+  .heroContent {
+    max-width: 100%;
+    margin-bottom: 3rem;
+  }
+  
+  .cta {
+    justify-content: center;
+  }
+  
+  .stats {
+    justify-content: center;
+  }
+  
+  .heroImageWrapper {
+    position: relative;
+    right: 0;
+    top: 0;
+    transform: none;
+    width: 90%;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .title {
+    font-size: 3rem;
+  }
+}
