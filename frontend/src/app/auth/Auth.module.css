@@ -32,6 +32,17 @@
   font-size: 0.95rem;
 }
 
+.errorMsg {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  padding: 0.8rem;
+  border-radius: 8px;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
 .form {
   display: flex;
   flex-direction: column;

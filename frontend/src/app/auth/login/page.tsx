@@ -3,14 +3,19 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import styles from '../Auth.module.css';
+import { useAuth } from '@/hooks/useAuth';
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
+  const { login, loading, error } = useAuth();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Login attempt:', formData);
-    // Implementation for login will go here
+    try {
+      await login(formData);
+    } catch (err) {
+      // Error handled by hook
+    }
   };
 
   return (
@@ -19,6 +24,8 @@ const LoginPage = () => {
         <h2 className={styles.title}>Welcome <span>Back</span></h2>
         <p className={styles.subtitle}>Enter your credentials to access your account</p>
         
+        {error && <div className={styles.errorMsg}>{error}</div>}
+        
         <form className={styles.form} onSubmit={handleSubmit}>
           <div className={styles.inputGroup}>
             <label>Email Address</label>
@@ -26,7 +33,7 @@ const LoginPage = () => {
               type="email" 
               placeholder="name@example.com"
               value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, email: e.target.value })}
               required
             />
           </div>
@@ -37,12 +44,14 @@ const LoginPage = () => {
               type="password" 
               placeholder="••••••••"
               value={formData.password}
-              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, password: e.target.value })}
               required
             />
           </div>
 
-          <button type="submit" className={styles.submitBtn}>Login</button>
+          <button type="submit" className={styles.submitBtn} disabled={loading}>
+            {loading ? 'Logging in...' : 'Login'}
+          </button>
         </form>
 
         <p className={styles.switch}>
