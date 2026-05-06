@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import styles from '../Auth.module.css';
+import { useAuth } from '@/hooks/useAuth';
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({ 
@@ -11,11 +12,15 @@ const RegisterPage = () => {
     password: '',
     phone: ''
   });
+  const { register, loading, error } = useAuth();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Register attempt:', formData);
-    // Implementation for registration will go here
+    try {
+      await register(formData);
+    } catch (err) {
+      // Error handled by hook
+    }
   };
 
   return (
@@ -24,6 +29,8 @@ const RegisterPage = () => {
         <h2 className={styles.title}>Create <span>Account</span></h2>
         <p className={styles.subtitle}>Join LuxeDrive and start your journey</p>
         
+        {error && <div className={styles.errorMsg}>{error}</div>}
+        
         <form className={styles.form} onSubmit={handleSubmit}>
           <div className={styles.inputGroup}>
             <label>Full Name</label>
@@ -31,7 +38,7 @@ const RegisterPage = () => {
               type="text" 
               placeholder="John Doe"
               value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, name: e.target.value })}
               required
             />
           </div>
@@ -42,7 +49,7 @@ const RegisterPage = () => {
               type="email" 
               placeholder="name@example.com"
               value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, email: e.target.value })}
               required
             />
           </div>
@@ -53,7 +60,7 @@ const RegisterPage = () => {
               type="tel" 
               placeholder="+92 300 1234567"
               value={formData.phone}
-              onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, phone: e.target.value })}
               required
             />
           </div>
@@ -64,12 +71,14 @@ const RegisterPage = () => {
               type="password" 
               placeholder="••••••••"
               value={formData.password}
-              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, password: e.target.value })}
               required
             />
           </div>
 
-          <button type="submit" className={styles.submitBtn}>Register</button>
+          <button type="submit" className={styles.submitBtn} disabled={loading}>
+            {loading ? 'Creating account...' : 'Register'}
+          </button>
         </form>
 
         <p className={styles.switch}>

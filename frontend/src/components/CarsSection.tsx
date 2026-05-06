@@ -1,30 +1,11 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import CarCard from './CarCard';
 import styles from './CarsSection.module.css';
+import { useCars } from '@/hooks/useCars';
 
 const CarsSection = () => {
-  const [cars, setCars] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const fetchCars = async () => {
-      try {
-        const response = await fetch('http://localhost:5000/api/cars');
-        if (!response.ok) throw new Error('Failed to fetch cars');
-        const result = await response.json();
-        setCars(result.data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchCars();
-  }, []);
+  const { cars, loading, error } = useCars();
 
   if (loading) return (
     <div className={styles.loaderContainer}>
@@ -35,7 +16,7 @@ const CarsSection = () => {
   if (error) return <div className={styles.error}>Error: {error}</div>;
 
   return (
-    <section className={styles.section}>
+    <section className={styles.section} id="cars">
       <div className="container">
         <div className={styles.header}>
           <h2 className={styles.title}>Our <span>Fleet</span></h2>
