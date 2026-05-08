@@ -2,17 +2,27 @@
 
 :root {
   --primary: #3b82f6;
-  --primary-glow: rgba(59, 130, 246, 0.5);
+  --primary-glow: rgba(59, 130, 246, 0.4);
   --secondary: #8b5cf6;
+  --background: #ffffff;
+  --surface: #f4f4f5;
+  --surface-hover: #e4e4e7;
+  --text: #09090b;
+  --text-dim: #71717a;
+  --accent: #f59e0b;
+  --glass: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(0, 0, 0, 0.1);
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[class~="dark"] {
   --background: #050505;
   --surface: #111111;
   --surface-hover: #1a1a1a;
   --text: #ffffff;
   --text-dim: #a1a1aa;
-  --accent: #f59e0b;
   --glass: rgba(255, 255, 255, 0.03);
   --glass-border: rgba(255, 255, 255, 0.1);
-  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 * {
